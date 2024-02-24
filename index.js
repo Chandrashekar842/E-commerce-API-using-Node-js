@@ -1,6 +1,7 @@
 import express from "express";
 import sequelize from "./database.js";
 import { authRouter } from "./routes/authRoutes.js";
+import { categoryRouter } from "./routes/categoryRoutes.js"; 
 
 const app = express();
 
@@ -9,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(authRouter)
+
+app.use(categoryRouter)
 
 sequelize
   .authenticate()
