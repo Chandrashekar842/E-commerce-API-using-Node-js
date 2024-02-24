@@ -1,11 +1,14 @@
 import express from "express";
 import sequelize from "./database.js";
+import { authRouter } from "./routes/authRoutes.js";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(authRouter)
 
 sequelize
   .authenticate()
