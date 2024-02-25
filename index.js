@@ -9,6 +9,9 @@ import { Cart } from "./models/cart.js";
 import { CartItem } from "./models/cart-items.js"; 
 import { User } from "./models/user.js"; 
 import { cartRouter } from "./routes/cartRoutes.js";
+import { Order } from "./models/order.js"; 
+import { OrderItem } from "./models/order-items.js"; 
+import { orderRouter } from "./routes/orderRoutes.js"; 
 
 const app = express();
 
@@ -24,11 +27,16 @@ app.use('/admin', productRouter)
 
 app.use(cartRouter)
 
+app.use(orderRouter)
+
 Category.hasMany(Product)
 User.hasOne(Cart)
 Cart.belongsTo(User)
 Cart.belongsToMany(Product, { through: CartItem })
 Product.belongsToMany(Cart, { through: CartItem })
+Order.belongsTo(User)
+User.hasMany(Order)
+Order.belongsToMany(Product, { through: OrderItem })
 
 sequelize
   .sync()

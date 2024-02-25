@@ -124,6 +124,16 @@ export const editProductById = async (req, res, next) => {
     updatedCategoryId,
   } = req.body;
 
+  const user = req.user;
+
+  const loggedInUser = await User.findOne({ where: { id: user.id } });
+
+  if (loggedInUser.isAdmin === false) {
+    return res
+      .status(402)
+      .json({ message: "Has to be Admin in order to add/edit Product" });
+  }
+
   try {
     const editProduct = await Product.findByPk(productId);
 
