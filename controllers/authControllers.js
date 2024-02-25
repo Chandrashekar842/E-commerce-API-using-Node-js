@@ -1,6 +1,7 @@
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Cart } from "../models/cart.js";
 
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, "ecommerce", { expiresIn: "1h" });
@@ -24,14 +25,10 @@ export const postSignUp = async (req, res, next) => {
     name,
     email,
     password: hashedPassword,
-    isAdmin
-  })
-    .then(() => {
+    isAdmin,
+  }).then(() => {
       return res.status(200).json({ message: "New User added" });
     })
-    .catch((err) => {
-      return res.status(404).json({error: err})
-    });
 };
 
 export const postLogin = async (req, res, next) => {
@@ -48,11 +45,17 @@ export const postLogin = async (req, res, next) => {
       if (doMatch) {
         const token = generateToken(user.id);
         req.user = user;
-        return res.status(200).json({ login: 'Success', jwt: token });
+        req.user.getCart()
+          .then(cart => {
+            if(!cart) {
+              user.createCart()
+            }
+          })
+        return res.status(200).json({ login: "Success", jwt: token });
       }
       return res.status(401).json({ error: "Invalid Credentials" });
     })
     .catch((err) => {
-        return res.status(400).json({error: err})
+      return res.status(400).json({ error: err });
     });
 };

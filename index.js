@@ -5,6 +5,10 @@ import { categoryRouter } from "./routes/categoryRoutes.js";
 import { Product } from "./models/product.js"; 
 import { productRouter } from "./routes/productRoutes.js"; 
 import { Category } from "./models/category.js";
+import { Cart } from "./models/cart.js"; 
+import { CartItem } from "./models/cart-items.js"; 
+import { User } from "./models/user.js"; 
+import { cartRouter } from "./routes/cartRoutes.js";
 
 const app = express();
 
@@ -18,7 +22,13 @@ app.use(categoryRouter)
 
 app.use('/admin', productRouter)
 
+app.use(cartRouter)
+
 Category.hasMany(Product)
+User.hasOne(Cart)
+Cart.belongsTo(User)
+Cart.belongsToMany(Product, { through: CartItem })
+Product.belongsToMany(Cart, { through: CartItem })
 
 sequelize
   .sync()
