@@ -7,7 +7,7 @@ const generateToken = (userId) => {
 };
 
 export const postSignUp = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, isAdmin } = req.body;
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -24,6 +24,7 @@ export const postSignUp = async (req, res, next) => {
     name,
     email,
     password: hashedPassword,
+    isAdmin
   })
     .then(() => {
       return res.status(200).json({ message: "New User added" });

@@ -1,7 +1,7 @@
 import sequelize from "../database.js";
 import { DataTypes } from "sequelize";
 
-const categorySchema = sequelize.define('Category',  {
+export const Category = sequelize.define('category',  {
     categoryId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -15,5 +15,3 @@ const categorySchema = sequelize.define('Category',  {
 }, {
     timestamps: false
 })
-
-export const Category = sequelize.model('Category', categorySchema)
